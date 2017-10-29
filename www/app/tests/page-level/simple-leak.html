@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <!-- partial:process -->
+    <title><%= titlePrefix %> Teste: formulário vulnerável</title>
+    <!-- /partial -->
+
+    <!-- partial:section layout.pageHeader -->
+    <!-- /partial -->
+</head>
+<body>
+
+<!-- partial:section layout.bodyHeader -->
+<!-- /partial -->
+
+<div class="container">
+
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/">Home</a></li>
+        <li class="breadcrumb-item"><a href="/page-level">Testes em contexto de página</a></li>
+        <li class="breadcrumb-item active">Formulário vulnerável</li>
+    </ol>
+
+    <h2>Formulário vulnerável</h2>
+
+    <p>Neste teste, uma página publicada em <code>www.jstest.me</code> contém um formulário de login e, ao mesmo tempo,
+        um <i>widget</i> de previsão do tempo controlado por um script oriundo de um domínio diferente - <code>scripts.jstest.me</code>.
+        Ocorre que este último domínio foi invadido por hackers: seus scripts foram modificados para que, além de
+        apresentarem o clima, roubem as informações contidas no formulário e as enviem, silenciosamente, para um serviço
+        no domínio invadido.</p>
+
+    <div class="alert alert-info" role="alert">
+        <b>Como avaliar este teste:</b> ao clique do botão "Entrar", o script malicioso fará uma requisição AJAX para o
+        domínio <code>scripts.jstest.me</code>, perceptível somente pelo console de desenvolvimento do navegador (F12).
+    </div>
+
+    <div class="well">
+        <h4>Seja bem-vindo ao portal do LeakBanco</h4>
+
+        <form method="post" onsubmit="return validateAndSubmitForm()">
+            <div class="form-group">
+                <label for="username" class="bmd-label-floating">Nome de usuário</label>
+                <input type="email" class="form-control" name="userName" id="username"/>
+            </div>
+            <div class="form-group">
+                <label for="password" class="bmd-label-floating">Senha</label>
+                <input type="password" class="form-control" name="password" id="password"/>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-raised">Entrar</button>
+        </form>
+
+        <div id="weatherPanel">Como está o tempo hoje? Aguarde um momento.</div>
+    </div>
+
+    <p>Este teste ignora as políticas de CSP, CORS e Subresource Integrity. O ataque simulado neste teste é do tipo
+        XSS.</p>
+
+</div>
+
+<!-- partial:section layout.bodyFooter -->
+<!-- /partial -->
+
+</body>
+
+<!-- partial:section layout.pageFooter -->
+<!-- /partial -->
+
+<script src="//scripts.jstest.me/weather.js"></script>
+
+<script>
+    $(function initPage() {
+        Weather.initialize($('#weatherPanel'));
+    });
+</script>
+
+</html>

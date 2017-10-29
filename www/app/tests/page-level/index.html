@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <!-- partial:process -->
+    <title><%= titlePrefix %> Page-level information leak tests</title>
+    <!-- /partial -->
+
+    <!-- partial:section layout.pageHeader -->
+    <!-- /partial -->
+</head>
+<body>
+
+<!-- partial:section layout.bodyHeader -->
+<!-- /partial -->
+
+<div class="container">
+
+    <div class="section-landing">
+        <h2>Casos de teste em contexto de página</h2>
+
+        <ul>
+            <li><a href="simple-leak.html">Formulário vulnerável</a>, em que um script malicioso captura o conteúdo de um formulário de login/senha.</li>
+            <li><a href="shadow-protect.html">Formulário em shadow DOM</a>, em que o conteúdo de um formulário passa a ser invisível a um script malicioso através de uma implementação ingênua do método proposto pela dissertação.</li>
+            <li><a href="shadow-interception.html">Interceptação de shadow DOM</a>, em que o método ingênuo de ocultação do conteúdo de elemento HTML é invalidado por interceptação da API de shadow DOM.</li>
+            <li><a href="interception-detection.html">Detecção de interceptação</a>, em que é explorado um método para detectar a interceptação de APIs do navegador.</li>
+            <li><a href="shadow-protect-strong.html">Formulário seguro em shadow DOM</a>, em que o método para detectar APIs interceptadas é integrado ao método de ocultação do formulário HTML.</li>
+        </ul>
+    </div>
+
+</div>
+
+<!-- partial:section layout.bodyFooter -->
+<!-- /partial -->
+
+</body>
+
+<!-- partial:section layout.pageFooter -->
+<!-- /partial -->
+</html>

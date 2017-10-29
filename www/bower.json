@@ -1,0 +1,31 @@
+{
+    "name": "testsuite",
+    "private": true,
+    "dependencies": {
+        "popper.js": "^1.12.5",
+        "bootstrap": "~3.3.5",
+        "bootstrap-material-design": "~0.3.0",
+        "components-font-awesome": "^4.7.0"
+    },
+    "overrides": {
+        "bootstrap": {
+            "main": [
+                "dist/js/bootstrap.js",
+                "dist/css/bootstrap.css"
+            ]
+        },
+        "bootstrap-material-design": {
+            "main": [
+                "dist/css/material.css",
+                "dist/css/ripples.css",
+                "dist/css/roboto.css",
+                "dist/js/material.js",
+                "dist/js/ripples.js"
+            ]
+        }
+    },
+    "devDependencies": {
+        "chai": "^4.1.2",
+        "mocha": "^3.5.0"
+    }
+}

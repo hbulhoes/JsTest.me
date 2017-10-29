@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <!-- partial:process -->
+    <title><%= titlePrefix %> Interception detection</title>
+    <!-- /partial -->
+
+    <!-- partial:section layout.pageHeader -->
+    <!-- /partial -->
+
+    <script>
+        var originalAPICall = document.write;
+
+        function intercept(flag) {
+            document.write = flag && originalAPICall || function manInTheMiddle() {
+                originalAPICall.apply(document, arguments);
+            };
+        }
+
+        function testInterception() {
+            var trojan = {
+                toString: function toString() {
+                    throw new Error('Erro para fins forenses.')
+                }
+            };
+
+            try {
+                document.write(trojan);
+            } catch (e) {
+                console.log(JSON.stringify(e));
+            }
+        }
+    </script>
+</head>
+<body>
+
+<!-- partial:section layout.bodyHeader -->
+<!-- /partial -->
+
+<div class="container">
+
+    <div class="section-landing">
+        <button onclick="intercept(true)">Ligar interceptador</button>
+        <button onclick="testInterception()">API interceptada?</button>
+        <button onclick="intercept(false)">Desligar interceptador</button>
+    </div>
+</div>
+
+<!-- partial:section layout.bodyFooter -->
+<!-- /partial -->
+
+</body>
+
+<!-- partial:section layout.pageFooter -->
+<!-- /partial -->
+</html>

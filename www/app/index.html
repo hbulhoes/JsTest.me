@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="">
+<head>
+    <meta charset="utf-8">
+
+    <!-- partial:process -->
+    <title><%= titlePrefix %> Javascript Information Leak Test Suite</title>
+    <!-- /partial -->
+
+    <!-- partial:section layout.pageHeader -->
+    <!-- /partial -->
+</head>
+<body>
+
+<!-- partial:section layout.bodyHeader -->
+<!-- /partial -->
+
+<div class="container section-landing">
+    <div class="jumbotron">
+        <h2>Javascript Information Leak Test Suite</h2>
+        <p class="lead">Parte da exploração do estado da arte na dissertação de mestrado <i>&ldquo;Método para
+            encapsulamento da informação em aplicações de HTML e Javascript&rdquo;</i>.</p>
+
+        <div class="row">
+            <div class="col-md-4">
+                <div class="panel">
+                    <div class="banner">
+                        <i class="fa fa-code" aria-hidden="true"></i>
+                        <h4>Casos de teste em contexto de página</h4>
+                        <p>Estes testes avaliam o vazamento de informação entre scripts carregados por uma mesma
+                            página.</p>
+                    </div>
+
+                    <p><a class="btn btn-md btn-info" href="tests/page-level/">Abrir</a></p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="panel">
+                    <div class="banner">
+                        <i class="fa fa-window-restore" aria-hidden="true"></i>
+                        <h4>Casos de teste em contexto de plugin</h4>
+                        <p>Estes testes avaliam a capacidade de vazamento de informação por um plugin
+                            mal-intencionado.</p>
+                    </div>
+
+                    <p><a class="btn btn-md btn-info" href="tests/plugin-level/">Abrir</a></p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="panel">
+                    <div class="banner">
+                        <i class="fa fa-user-secret" aria-hidden="true"></i>
+                        <h4>Casos de teste com aplicação de IFC</h4>
+                        <p>Estes testes avaliam o nível de segurança em um navegador preparado para IFC.</p>
+                    </div>
+
+                    <p><a class="btn btn-md btn-info" href="tests/ifc-based/">Abrir</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row marketing">
+        <!--<div class="col-lg-6">
+          <h4><a href="https://html5boilerplate.com/">HTML5 Boilerplate</a></h4>
+          <p>HTML5 Boilerplate is a professional front-end template for building fast, robust, and adaptable web apps or
+            sites.</p>
+
+          <h4><a href="http://libsass.org/">Sass</a></h4>
+          <p>Sass is a mature, stable, and powerful professional grade CSS extension language.</p>
+
+
+          <h4><a href="https://fezvrasta.github.io/bootstrap-material-design/">Material Design for Bootstrap</a></h4>
+          <p>Material Design for Bootstrap is a theme for Bootstrap 3 which lets you use the new Google Material Design in
+            your favorite front-end framework.</p>
+
+
+        </div>-->
+    </div>
+
+    <div class="footer">
+        <p>Este é um projeto acadêmico de Humberto B. Bulhões.<br/>Contato: humberto.bulhoes @ gmail.com</p>
+    </div>
+</div>
+
+<!-- partial:section layout.bodyFooter -->
+<!-- /partial -->
+
+</body>
+</html>
