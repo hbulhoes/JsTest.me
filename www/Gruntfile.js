@@ -262,52 +262,6 @@ module.exports = function (grunt) {
             css: ['<%= config.dist %>/styles/{,*/}*.css']
         },
 
-        // The following *-min tasks produce minified files in the dist folder
-        imagemin: {
-            dist: {
-                files: [{
-                    expand: true,
-                    cwd: '<%= config.app %>/images',
-                    src: '{,*/}*.{gif,jpeg,jpg,png}',
-                    dest: '<%= config.dist %>/images'
-                }]
-            }
-        },
-
-        svgmin: {
-            dist: {
-                files: [{
-                    expand: true,
-                    cwd: '<%= config.app %>/images',
-                    src: '{,*/}*.svg',
-                    dest: '<%= config.dist %>/images'
-                }]
-            }
-        },
-
-        htmlmin: {
-            dist: {
-                options: {
-                    collapseBooleanAttributes: true,
-                    //collapseWhitespace: true,
-                    //conservativeCollapse: true,
-                    removeAttributeQuotes: true,
-                    removeCommentsFromCDATA: true,
-                    removeEmptyAttributes: true,
-                    removeOptionalTags: true,
-                    // true would impact styles with attribute selectors
-                    removeRedundantAttributes: false,
-                    useShortDoctype: true
-                },
-                files: [{
-                    expand: true,
-                    cwd: '<%= config.dist %>',
-                    src: '{,*/}*.html',
-                    dest: '<%= config.dist %>'
-                }]
-            }
-        },
-
         // By default, your `index.html`'s <!-- Usemin block --> will take care
         // of minification. These next options are pre-configured if you do not
         // wish to use the Usemin blocks.
@@ -352,13 +306,32 @@ module.exports = function (grunt) {
                 }]
             },
             fonts: {
+                files: [
+                    {
+                        expand: true,
+                        flatten: true,
+                        dot: true,
+                        cwd: '<%= config.app %>',
+                        dest: '<%= config.dist %>/fonts',
+                        src: '../bower_components/**/*.{eot,svg,ttf,woff,woff2}'
+                    },
+                    {
+                        expand: true,
+                        flatten: true,
+                        dot: true,
+                        cwd: 'node_modules/open-weather-icons/dist/fonts',
+                        dest: '<%= config.dist %>/fonts',
+                        src: '*.{eot,svg,ttf,woff,woff2}'
+                    }]
+            },
+            weatherIcons: {
                 files: [{
                     expand: true,
                     flatten: true,
                     dot: true,
-                    cwd: '<%= config.app %>',
-                    dest: '<%= config.dist %>/fonts',
-                    src: '../bower_components/**/*.{eot,svg,ttf,woff,woff2}'
+                    cwd: 'node_modules/open-weather-icons/dist/css',
+                    dest: '<%= config.dist %>/styles',
+                    src: '*.css'
                 }]
             }
         },
@@ -374,9 +347,7 @@ module.exports = function (grunt) {
             ],
             dist: [
                 'babel',
-                'sass',
-                'imagemin',
-                'svgmin'
+                'sass'
             ]
         },
 
@@ -398,9 +369,10 @@ module.exports = function (grunt) {
                         }
                     },
                     data: {
-                        version: "0.1.0",
-                        titlePrefix: "jstest.me:",
-                        rootPath: "/"
+                        version: '0.1.0',
+                        titlePrefix: 'jstest.me:',
+                        rootPath: '/',
+                        cdnDomain: 'scripts.vector-cdn.net'
                     }
                 }
             }
@@ -455,11 +427,9 @@ module.exports = function (grunt) {
         'concat:generated',
         //'cssmin:generated',
         //'uglify:generated',
-        'copy:dist',
-        'copy:fonts',
+        'copy',
         'filerev',
-        'usemin',
-        'htmlmin'// Irrelevante para o projeto
+        'usemin'
     ]);
 
     grunt.registerTask('gen-html', [

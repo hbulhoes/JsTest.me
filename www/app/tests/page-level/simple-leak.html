@@ -9,6 +9,18 @@
 
     <!-- partial:section layout.pageHeader -->
     <!-- /partial -->
+
+    <style>
+        #weatherPanel {
+            float: right;
+            width: 100px;
+            text-align: right;
+        }
+
+        #weatherPanel i.owi {
+            font-size: 40px;
+        }
+    </style>
 </head>
 <body>
 
@@ -25,18 +37,22 @@
 
     <h2>Formulário vulnerável</h2>
 
+    <!-- partial:process -->
     <p>Neste teste, uma página publicada em <code>www.jstest.me</code> contém um formulário de login e, ao mesmo tempo,
-        um <i>widget</i> de previsão do tempo controlado por um script oriundo de um domínio diferente - <code>scripts.jstest.me</code>.
+        um <i>widget</i> de previsão do tempo controlado por um script oriundo de um domínio diferente - <code><%= cdnDomain %></code>.
         Ocorre que este último domínio foi invadido por hackers: seus scripts foram modificados para que, além de
         apresentarem o clima, roubem as informações contidas no formulário e as enviem, silenciosamente, para um serviço
         no domínio invadido.</p>
 
     <div class="alert alert-info" role="alert">
         <b>Como avaliar este teste:</b> ao clique do botão "Entrar", o script malicioso fará uma requisição AJAX para o
-        domínio <code>scripts.jstest.me</code>, perceptível somente pelo console de desenvolvimento do navegador (F12).
+        domínio <code><%= cdnDomain %></code>, perceptível somente pelo console de desenvolvimento do navegador (F12).
     </div>
+    <!-- /partial -->
 
     <div class="well">
+        <div id="weatherPanel">Como está o tempo hoje? Aguarde um momento.</div>
+        
         <h4>Seja bem-vindo ao portal do LeakBanco</h4>
 
         <form method="post" onsubmit="return validateAndSubmitForm()">
@@ -51,12 +67,9 @@
 
             <button type="submit" class="btn btn-primary btn-raised">Entrar</button>
         </form>
-
-        <div id="weatherPanel">Como está o tempo hoje? Aguarde um momento.</div>
     </div>
 
-    <p>Este teste ignora as políticas de CSP, CORS e Subresource Integrity. O ataque simulado neste teste é do tipo
-        XSS.</p>
+    <p>Este teste é aderente ao mecanismo CORS. O ataque simulado neste teste é do tipo XSS.</p>
 
 </div>
 
@@ -68,7 +81,11 @@
 <!-- partial:section layout.pageFooter -->
 <!-- /partial -->
 
-<script src="//scripts.jstest.me/weather.js"></script>
+<!-- build:css(.) /styles/open-weather-icons.css -->
+<link rel="stylesheet" href="/node_modules/open-weather-icons/dist/css/open-weather-icons.css">
+<!-- endbuild -->
+
+<script src="//scripts.vector-cdn.net/scripts/weather.js"></script>
 
 <script>
     $(function initPage() {

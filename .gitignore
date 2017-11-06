@@ -3,3 +3,9 @@ node_modules
 bower_components
 .idea
 dist/
+.vs
+*.user
+bin/
+obj/
+*.PublishSettings
+*.pubxml
