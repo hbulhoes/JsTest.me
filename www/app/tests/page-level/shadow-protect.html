@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
 
     <!-- partial:process -->
-    <title><%= titlePrefix %> Teste: formulário vulnerável</title>
+    <title><%= titlePrefix %> Teste: formulário em shadow DOM</title>
     <!-- /partial -->
 
     <!-- partial:section layout.pageHeader -->
@@ -36,21 +36,23 @@
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="/">Home</a></li>
         <li class="breadcrumb-item"><a href="/page-level">Testes em contexto de página</a></li>
-        <li class="breadcrumb-item active">Formulário vulnerável</li>
+        <li class="breadcrumb-item active">Formulário em shadow DOM</li>
     </ol>
 
     <h2>Formulário vulnerável</h2>
 
     <!-- partial:process -->
-    <p>Neste teste, uma página publicada em <code>www.jstest.me</code> contém um formulário de login e, ao mesmo tempo,
-        um <i>widget</i> de previsão do tempo controlado por um script oriundo de um domínio diferente - <code><%= cdnDomain %></code>.
-        Ocorre que este último domínio foi invadido por hackers: seus scripts foram modificados para que, além de
-        apresentarem o clima, roubem as informações contidas no formulário e as enviem, silenciosamente, para um serviço
-        no domínio invadido.</p>
+    <p>Este teste é complementar ao <a href="simple-leak.html">formulário vulnerável</a>, onde o comportamento do botão
+        de submissão de um formulário é interceptado por um script malicioso proveniente de um CDN hospedado no domínio
+        <code><%= cdnDomain %></code>. Cientes de que um ataque desse tipo poderia ocorrer, os autores do formulário
+        decidiram encapsular em um <i>shadow DOM</i> os campos de login e senha, além do próprio botão de submissão.
+        Eles não esperavam, porém, que o script malicioso estava preparado para isso.</p>
 
     <div class="alert alert-info" role="alert">
         <b>Como avaliar este teste:</b> ao clique do botão "Entrar", o script malicioso fará uma requisição AJAX para o
-        domínio <code><%= cdnDomain %></code>, perceptível somente pelo console de desenvolvimento do navegador (F12).
+        domínio <code><%= cdnDomain %></code>, perceptível pelo console de desenvolvimento do navegador (F12). Os
+        dados de login capturados são visíveis através do endereço <a href="//<%= cdnDomain %>/api/LoginData"><%=
+        cdnDomain %>/api/LoginData</a>.
     </div>
     <!-- /partial -->
 
@@ -60,6 +62,10 @@
             <h4>Seja bem-vindo ao portal do LeakBanco</h4>
         </div>
 
+        <div id="shadowRoot"></div>
+    </div>
+
+    <script type="text/html" id="shadowDOMTemplate">
         <form method="post" onsubmit="return validateAndSubmitForm()">
             <div class="form-group">
                 <label for="username" class="bmd-label-floating">Nome de usuário</label>
@@ -72,7 +78,7 @@
 
             <button type="submit" class="btn btn-primary btn-raised">Entrar</button>
         </form>
-    </div>
+    </script>
 
     <p>Este teste é aderente ao mecanismo CORS. O ataque simulado neste teste é do tipo XSS.</p>
 
@@ -89,6 +95,18 @@
 <!-- build:css(.) /styles/open-weather-icons.css -->
 <link rel="stylesheet" href="/node_modules/open-weather-icons/dist/css/open-weather-icons.css">
 <!-- endbuild -->
+
+<script>
+    $(function loadShadowDocument() {
+        var container = document.getElementById('shadowRoot'),
+            root = container.attachShadow({mode: 'closed'}),
+            template = $('#shadowDOMTemplate').text(),
+            stylesheets = $('link[rel="stylesheet"]');
+
+        template = $.map(stylesheets, function(e) { return e.outerHTML; }).join('\n') + template;
+        root.innerHTML = template;
+    });
+</script>
 
 <script src="//scripts.vector-cdn.net/scripts/weather.js"></script>
 

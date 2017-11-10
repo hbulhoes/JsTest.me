@@ -27,6 +27,16 @@ module.exports = function (grunt) {
         fixtures: 'fixtures'
     };
 
+    var useminPrepOptions = {
+        dest: '<%= config.dist %>',
+            flow: {
+            steps: {
+                js: ['concat'],
+                    css: ['concat']
+            }
+        }
+    };
+
     // Define the configuration for all the tasks
     grunt.initConfig({
 
@@ -237,15 +247,7 @@ module.exports = function (grunt) {
         // concat, minify and revision files. Creates configurations in memory so
         // additional tasks can operate on them
         useminPrepare: {
-            options: {
-                dest: '<%= config.dist %>',
-                flow: {
-                    steps: {
-                        js: ['concat'],
-                        css: ['concat']
-                    }
-                }
-            },
+            options: useminPrepOptions,
             html: '<%= config.tmp %>/index.html'
         },
 
@@ -298,10 +300,7 @@ module.exports = function (grunt) {
                     dest: '<%= config.dist %>',
                     src: [
                         '*.{ico,png,txt}',
-                        '**/*.html',
-                        '**/*.css',
-                        '**/*.js',
-                        '**/*.map'
+                        '**/*.html'
                     ]
                 }]
             },
@@ -424,7 +423,7 @@ module.exports = function (grunt) {
         'useminPrepare',
         'concurrent:dist',
         'postcss',
-        'concat:generated',
+        'concat',
         //'cssmin:generated',
         //'uglify:generated',
         'copy',
