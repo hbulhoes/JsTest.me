@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.StaticFiles.Infrastructure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -23,6 +24,7 @@ namespace ScriptsDomain
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
+            services.AddScriptTemplatingSupport();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -34,14 +36,14 @@ namespace ScriptsDomain
             }
 
             app.UseDefaultFiles();
-            app.UseStaticFiles();
-
             app.UseMvc();
 
-            app.UseScriptTemplatingSupport("/scripts", new Dictionary<string, Func<string, string>>()
+            app.UseScriptTemplatingSupport("/scripts", new Dictionary<string, Func<string, string>>
             {
                 {"cdnDomain", s => "scripts.vector-cdn.net"}
             });
+
+            app.UseStaticFiles();
         }
     }
 }

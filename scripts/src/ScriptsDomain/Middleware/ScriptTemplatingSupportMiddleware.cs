@@ -1,41 +1,40 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
-using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 
 namespace ScriptsDomain.Middleware
 {
     public class ScriptTemplatingSupportMiddleware
     {
-        private readonly RequestDelegate _next;
-        private readonly PathString _scriptsBase;
-        private readonly IDictionary<Regex, Func<string, string>> _mapper;
+        private IHostingEnvironment _hostingEnvironment;
 
-        public ScriptTemplatingSupportMiddleware(RequestDelegate next, IApplicationBuilder builder, string scriptsBase, IDictionary<string, Func<string, string>> mapper)
+        public ScriptTemplatingSupportMiddleware(IHostingEnvironment hostingEnvironment)
         {
-            _next = next;
-            _scriptsBase = scriptsBase;
-            _mapper = mapper.ToDictionary(kvp => new Regex(@"\<%=\s*" + kvp.Key + @"\s%\>"), kvp => kvp.Value);
+            _hostingEnvironment = hostingEnvironment;
         }
 
-        public async Task Invoke(HttpContext context)
+        public async Task Invoke(HttpContext context, IDictionary<Regex, Func<string, string>> mapper)
         {
-            // Call the next delegate/middleware in the pipeline
-            await _next(context);
-
-            if (context.Response.StatusCode == 200 && context.Request.Path.StartsWithSegments(_scriptsBase))
+            var fileInfo = _hostingEnvironment.WebRootFileProvider.GetFileInfo(context.Request.Path);
+            if (!fileInfo.Exists || fileInfo.IsDirectory)
             {
-                var outs = new StringWriter(new StringBuilder());
-                using (var ins = new StreamReader(context.Response.Body, Encoding.UTF8))
+                context.Response.StatusCode = 404;
+                await context.Response.WriteAsync("Not found");
+                return;
+            }
+
+            using (var outs = new StreamWriter(context.Response.Body))
+            using (var ins = new StreamReader(fileInfo.CreateReadStream(), Encoding.UTF8))
+            {
+                var s = ins.ReadLine();
+                while (s != null)
                 {
-                    var s = ins.ReadLine();
-                    foreach (var kvp in _mapper)
+                    foreach (var kvp in mapper)
                     {
                         var pattern = kvp.Key;
                         if (pattern.IsMatch(s))
@@ -45,7 +44,8 @@ namespace ScriptsDomain.Middleware
                         }
                     }
 
-                    outs.WriteLine(s);
+                    await outs.WriteLineAsync(s);
+                    s = ins.ReadLine();
                 }
             }
         }
