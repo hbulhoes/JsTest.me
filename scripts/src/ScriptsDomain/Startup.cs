@@ -38,12 +38,20 @@ namespace ScriptsDomain
             app.UseDefaultFiles();
             app.UseMvc();
 
-            app.UseScriptTemplatingSupport("/scripts", new Dictionary<string, Func<string, string>>
+            /*app.UseScriptTemplatingSupport("/scripts", new Dictionary<string, Func<string, string>>
             {
                 {"cdnDomain", s => "scripts.vector-cdn.net"}
-            });
+            });*/
 
             app.UseStaticFiles();
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                RequestPath = "/scripts",
+                FileProvider = new ScriptTemplatingFileProvider(new Dictionary<string, Func<string, string>>
+                {
+                    {"cdnDomain", s => "scripts.vector-cdn.net"}
+                }, app.ApplicationServices.GetService<IHostingEnvironment>())
+            });
         }
     }
 }
