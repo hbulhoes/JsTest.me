@@ -44,7 +44,7 @@
     window.Weather = {
         initialize: function weather_initialize(targetElem) {
             var res = $.ajax({
-                url: '//scripts.vector-cdn.net/api/Weather',
+                url: '//<%= cdnDomain %>/api/Weather',
                 success: function(data) {
                     console.info(data);
                     targetElem.empty().append($('<i>').addClass('owi').addClass('owi-' + data.icon));

@@ -10,6 +10,8 @@
 
 module.exports = function (grunt) {
 
+    grunt.loadNpmTasks('grunt-execute');
+
     // Time how long tasks take. Can help when optimizing build times
     require('time-grunt')(grunt);
 
@@ -29,12 +31,22 @@ module.exports = function (grunt) {
 
     var useminPrepOptions = {
         dest: '<%= config.dist %>',
-            flow: {
+        flow: {
             steps: {
                 js: ['concat'],
-                    css: ['concat']
+                css: ['concat']
             }
         }
+    };
+
+    var productionEnv = {
+        appDomain: 'www.jstest.me',
+        cdnDomain: 'scripts.vector-cdn.net'
+    };
+
+    var debugEnv = {
+        appDomain: 'dev.jstest.me',
+        cdnDomain: 'dev.scripts.vector-cdn.net'
     };
 
     // Define the configuration for all the tasks
@@ -371,8 +383,22 @@ module.exports = function (grunt) {
                         version: '0.1.0',
                         titlePrefix: 'jstest.me:',
                         rootPath: '/',
-                        cdnDomain: 'scripts.vector-cdn.net'
+                        appDomain: '<%= grunt.option("env").appDomain %>',
+                        cdnDomain: '<%= grunt.option("env").cdnDomain %>'
                     }
+                }
+            }
+        },
+
+        execute: {
+            setenvDebug: {
+                call: function setenvDebug() {
+                    grunt.option('env', debugEnv);
+                }
+            },
+            setenvProduction: {
+                call: function setenvProduction() {
+                    grunt.option('env', productionEnv);
                 }
             }
         }
@@ -416,8 +442,7 @@ module.exports = function (grunt) {
         ]);
     });
 
-    grunt.registerTask('build', [
-        'clean:dist',
+    var buildSteps = ['clean:dist',
         'htmlbuild',
         'wiredep',
         'useminPrepare',
@@ -429,7 +454,10 @@ module.exports = function (grunt) {
         'copy',
         'filerev',
         'usemin'
-    ]);
+    ];
+
+    grunt.registerTask('debug', ['execute:setenvDebug'].concat(buildSteps));
+    grunt.registerTask('release', ['execute:setenvProduction'].concat(buildSteps));
 
     grunt.registerTask('gen-html', [
         'clean:dist',

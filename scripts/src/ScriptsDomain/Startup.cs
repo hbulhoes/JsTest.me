@@ -1,9 +1,12 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using System;
+using System.Collections.Generic;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using ScriptsDomain.Middleware;
 
 namespace ScriptsDomain
 {
@@ -35,10 +38,10 @@ namespace ScriptsDomain
 
             app.UseMvc();
 
-            /*app.UseMvc(routes =>
+            app.UseScriptTemplatingSupport("/scripts", new Dictionary<string, Func<string, string>>()
             {
-                routes.MapRoute("default", "{controller=Weather}/{action=Get}");
-            });*/
+                {"cdnDomain", s => "scripts.vector-cdn.net"}
+            });
         }
     }
 }
