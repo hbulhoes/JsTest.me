@@ -11,6 +11,7 @@
 module.exports = function (grunt) {
 
     grunt.loadNpmTasks('grunt-execute');
+    grunt.loadNpmTasks('grunt-eol');
 
     // Time how long tasks take. Can help when optimizing build times
     require('time-grunt')(grunt);
@@ -54,6 +55,16 @@ module.exports = function (grunt) {
 
         // Project settings
         config: config,
+
+        eol: {
+            dist: {
+                options: {
+                    eol: 'lf',
+                    replace: true
+                },
+                files: [{ src: ['<%= config.tmp %>/**/*.html'] }]
+            }
+        },
 
         // Watches files for changes and runs tasks based on the changed files
         watch: {
@@ -344,6 +355,16 @@ module.exports = function (grunt) {
                     dest: '<%= config.dist %>/styles',
                     src: '*.css'
                 }]
+            },
+            otherAssets: {
+                files: [{
+                    expand: true,
+                    flatten: true,
+                    dot: true,
+                    cwd: 'app',
+                    dest: '<%= config.dist %>/',
+                    src: 'favicon.ico'
+                }]
             }
         },
 
@@ -445,12 +466,11 @@ module.exports = function (grunt) {
     var buildSteps = ['clean:dist',
         'htmlbuild',
         'wiredep',
+        'eol',
         'useminPrepare',
         'concurrent:dist',
         'postcss',
         'concat',
-        //'cssmin:generated',
-        //'uglify:generated',
         'copy',
         'filerev',
         'usemin'
@@ -458,6 +478,10 @@ module.exports = function (grunt) {
 
     grunt.registerTask('debug', ['execute:setenvDebug'].concat(buildSteps));
     grunt.registerTask('release', ['execute:setenvProduction'].concat(buildSteps));
+
+    for (var i = 0; i != buildSteps.length; i++) {
+        grunt.registerTask('debug-' + i, ['execute:setenvDebug'].concat(buildSteps.slice(0, i)));
+    }
 
     grunt.registerTask('gen-html', [
         'clean:dist',
