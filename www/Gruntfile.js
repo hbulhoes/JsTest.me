@@ -214,7 +214,7 @@ module.exports = function (grunt) {
                 files: [{
                     expand: true,
                     cwd: '<%= config.app %>/styles',
-                    src: ['*.{scss,sass}'],
+                    src: ['**/*.{scss,sass}'],
                     dest: '.tmp/styles',
                     ext: '.css'
                 }]
@@ -235,7 +235,7 @@ module.exports = function (grunt) {
                 files: [{
                     expand: true,
                     cwd: '.tmp/styles/',
-                    src: '{,*/}*.css',
+                    src: '**/*.css',
                     dest: '.tmp/styles/'
                 }]
             }
@@ -271,7 +271,7 @@ module.exports = function (grunt) {
         // additional tasks can operate on them
         useminPrepare: {
             options: useminPrepOptions,
-            html: '<%= config.tmp %>/index.html'
+            html: '<%= config.tmp %>/_usemin.html'
         },
 
         // Performs rewrites based on rev and the useminPrepare configuration
@@ -284,7 +284,7 @@ module.exports = function (grunt) {
                 ]
             },
             html: ['<%= config.dist %>/**/*.html'],
-            css: ['<%= config.dist %>/styles/{,*/}*.css']
+            css: ['<%= config.dist %>/styles/**/*.css']
         },
 
         // By default, your `index.html`'s <!-- Usemin block --> will take care
@@ -356,10 +356,27 @@ module.exports = function (grunt) {
                     src: '*.css'
                 }]
             },
+            samplesCsss: {
+                files: [{
+                    expand: true,
+                    dot: true,
+                    cwd: '<%= config.tmp %>',
+                    dest: '<%= config.dist %>',
+                    src: ['styles/samples/**/*.css']
+                }]
+            },
+            samplesScripts: {
+                files: [{
+                    expand: true,
+                    dot: true,
+                    cwd: '<%= config.app %>',
+                    dest: '<%= config.dist %>',
+                    src: ['scripts/samples/**/*.js']
+                }]
+            },
             otherAssets: {
                 files: [{
                     expand: true,
-                    flatten: true,
                     dot: true,
                     cwd: 'app',
                     dest: '<%= config.dist %>/',
@@ -479,9 +496,11 @@ module.exports = function (grunt) {
     grunt.registerTask('debug', ['execute:setenvDebug'].concat(buildSteps));
     grunt.registerTask('release', ['execute:setenvProduction'].concat(buildSteps));
 
+    /* APENAS PARA DEPURAÇÃO DO PROCESSO DE BUILD:
     for (var i = 0; i != buildSteps.length; i++) {
         grunt.registerTask('debug-' + i, ['execute:setenvDebug'].concat(buildSteps.slice(0, i)));
     }
+    */
 
     grunt.registerTask('gen-html', [
         'clean:dist',

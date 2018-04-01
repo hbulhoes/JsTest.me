@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <!-- partial:process -->
+    <title><%= titlePrefix %> Demos and exercises: "Interference"</title>
+    <!-- /partial -->
+
+    <!-- partial:section layout.pageHeader -->
+    <!-- /partial -->
+
+    <link rel="stylesheet" href="/styles/samples/interference/app.css" />
+    <script src="/scripts/samples/interference/widget.js"></script>
+</head>
+
+<!-- partial:section layout.bodyHeader -->
+<!-- /partial -->
+
+<div class="container">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/">Home</a></li>
+        <li class="breadcrumb-item"><a href="/samples">Exercícios exploratórios</a></li>
+        <li class="breadcrumb-item active">Colisão de seletores em CSS</li>
+    </ol>
+
+    <h2>Colisão de seletores em CSS</h2>
+
+    <p>Este exemplo ilustra, simplificadamente, um problema decorrente da incorporação de folhas de estilo que estabelecem
+    seletores que atingem os mesmos elementos HTML. A consequência dessa colisão de seletores é a apresentação disfuncional
+    das páginas web, ocasionando quebra de layout.</p>
+
+    <div class="aside">
+        <div class="default-alert">Mensagem: alerta padrão da aplicação web</div>
+        <div class="caption">Região <tt>DIV</tt> estilizada com a classe <tt>default-alert</tt>, definida na folha de
+        estilos app.css</div>
+    </div>
+
+    <p>
+    Neste exemplo, a página web carrega uma folha de estilos (app.css) contendo um seletor <tt>DIV.default-alert</tt> cuja
+    visualização pretendida é ilustrada ao lado. A página incorpora ainda um componente de terceiros denominado
+    <tt>my-widget</tt>, cujo comportamento causará uma colisão de seletores de CSS.
+
+    <p>O componente <tt>my-widget</tt> inclui um botão que, ao ser acionado, efetua a carga de uma segunda folha
+    de estilos (widget.css). Essa folha de estilos também define um seletor <tt>DIV.default-alert</tt>, que colide com o
+    seletor originalmente carregado pela página. Isso causa uma mudança inesperada no layout demonstrado à direita.</p>
+
+    <p>Técnicas foram desenvolvidas para reduzir a possibilidade de ocorrência de colisões de seletor, como a prefixação
+        de <i>namespaces</i> em seletores de CSS. Porém, uma solução mais robusta é alcançada pelo
+        uso de <a href="interference-solved.html">shadow DOM</a>.</p>
+
+    <div class="well">
+        <my-widget
+            button-text="Clique para exibir a mensagem do componente my-widget"
+            alert-text="Obrigado por acionar o componente my-widget." />
+    </div>
+
+</div>
+
+<!-- partial:section layout.bodyFooter -->
+<!-- /partial -->
+
+</body>
+
+<!-- partial:section layout.pageFooter -->
+<!-- /partial -->
+</html>

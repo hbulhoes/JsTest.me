@@ -1,0 +1,22 @@
+DIV.default-alert {
+    border: 1px solid #f6b73c;
+    background-color: #fff3d4;
+    color: #f6b73c;
+    text-align: center;
+    padding: 1em;
+}
+
+DIV.aside {
+    float: right;
+    margin-left: 1em;
+    margin-top: 1em;
+    padding: 1em;
+    border-left: 1px dotted #ccc;
+
+    .caption {
+        font-size: 90%;
+        text-align: center;
+        font-style: italic;
+        margin: 1em 0;
+    }
+}
