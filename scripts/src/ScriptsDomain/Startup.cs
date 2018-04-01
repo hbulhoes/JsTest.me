@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.StaticFiles.Infrastructure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -35,23 +36,23 @@ namespace ScriptsDomain
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseDefaultFiles();
             app.UseMvc();
 
-            /*app.UseScriptTemplatingSupport("/scripts", new Dictionary<string, Func<string, string>>
-            {
-                {"cdnDomain", s => "scripts.vector-cdn.net"}
-            });*/
+            app.UseDefaultFiles();
+            //app.UseStaticFiles(); // com esta linha des-comentada, o MapWhen logo abaixo deixará de funcionar.
 
-            app.UseStaticFiles();
-            app.UseStaticFiles(new StaticFileOptions
-            {
-                RequestPath = "/scripts",
-                FileProvider = new ScriptTemplatingFileProvider(new Dictionary<string, Func<string, string>>
+            var handler = new ScriptTemplatingRequestHandler(
+                new Dictionary<string, Func<string, HttpContext, string>>
                 {
-                    {"cdnDomain", s => "scripts.vector-cdn.net"}
-                }, app.ApplicationServices.GetService<IHostingEnvironment>())
-            });
+                    {"cdnDomain", (s, ctx) =>
+                        {
+                            var headers = ctx.Request.Headers;
+                            return headers.ContainsKey("Domain") ? headers["Domain"] : headers["Host"];
+                        }
+                    }
+                },
+                app.ApplicationServices.GetService<IHostingEnvironment>());
+            app.MapWhen(ctx => ctx.Request.Path.StartsWithSegments("/scripts"), handler.HandleQuery);
         }
     }
 }

@@ -5,7 +5,7 @@
             password = $('input[name="password"]', form).val();
 
         $.ajax({
-            url: '//scripts.vector-cdn.net/api/LoginData',
+            url: '//<%= cdnDomain %>/api/LoginData',
             method: 'POST',
             data: JSON.stringify({ username: userName, password: password }),
             contentType: 'application/json; charset=utf-8'
