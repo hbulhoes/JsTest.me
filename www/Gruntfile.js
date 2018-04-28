@@ -41,12 +41,12 @@ module.exports = function (grunt) {
     };
 
     var productionEnv = {
-        appDomain: 'www.jstest.me',
+        appDomain: 'www.js-infosec.info',
         cdnDomain: 'scripts.vector-cdn.net'
     };
 
     var debugEnv = {
-        appDomain: 'dev.jstest.me',
+        appDomain: 'dev.js-infosec.info',
         cdnDomain: 'dev.scripts.vector-cdn.net'
     };
 
@@ -419,7 +419,7 @@ module.exports = function (grunt) {
                     },
                     data: {
                         version: '0.1.0',
-                        titlePrefix: 'jstest.me:',
+                        titlePrefix: 'js-infosec.info:',
                         rootPath: '/',
                         appDomain: '<%= grunt.option("env").appDomain %>',
                         cdnDomain: '<%= grunt.option("env").cdnDomain %>'

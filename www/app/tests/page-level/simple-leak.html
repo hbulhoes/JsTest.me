@@ -42,7 +42,7 @@
     <h2>Formulário vulnerável</h2>
 
     <!-- partial:process -->
-    <p>Neste teste, uma página publicada em <code>www.jstest.me</code> contém um formulário de login e, ao mesmo tempo,
+    <p>Neste teste, uma página publicada em <code><%= appDomain %></code> contém um formulário de login e, ao mesmo tempo,
         um <i>widget</i> de previsão do tempo controlado por um script oriundo de um domínio diferente - <code><%= cdnDomain %></code>.
         Ocorre que este último domínio foi invadido por hackers: seus scripts foram modificados para que, além de
         apresentarem o clima, roubem as informações contidas no formulário e as enviem, silenciosamente, para um serviço
